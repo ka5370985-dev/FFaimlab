@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FF Aim Lab - Sensitivity & Accuracy Trainer</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        :root {
+            --primary-red: #e63946;
+            --primary-orange: #ff9f1c;
+            --neon-yellow: #ffd166;
+            --dark-bg: #0a0f1a;
+            --card-bg: #1e2a3a;
+            --text-white: #ffffff;
+            --text-gray: #a0a0a0;
+            --glitch-color: #00f2ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-white);
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(230, 57, 70, 0.05) 0%, transparent 80%),
+                linear-gradient(rgba(10, 15, 26, 0.95), rgba(10, 15, 26, 0.95)),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill-rule='evenodd' stroke='%231e2a3a' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .logo-container {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .main-logo {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 15px rgba(230, 57, 70, 0.4));
+            margin-bottom: 15px;
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); filter: drop-shadow(0 0 15px rgba(230, 57, 70, 0.4)); }
+            to { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(230, 57, 70, 0.7)); }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: var(--primary-red);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(230, 57, 70, 0.5);
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); text-shadow: -2px 0 var(--glitch-color), 2px 0 var(--primary-red); }
+            2% { transform: translate(-2px, 2px); }
+            4% { transform: translate(-2px, -2px); }
+            6% { transform: translate(2px, 2px); }
+            8% { transform: translate(2px, -2px); }
+            10% { transform: translate(0); text-shadow: -2px 0 var(--glitch-color), 2px 0 var(--primary-red); }
+            100% { transform: translate(0); }
+        }
+
+        p.subtitle {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 992px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-red), var(--primary-orange));
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-orange);
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px 15px;
+            background: #0f172a;
+            border: 2px solid #2d3e50;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 10px rgba(230, 57, 70, 0.3);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #2d3e50;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radio-option:hover {
+            border-color: var(--primary-orange);
+        }
+
+        .radio-option input {
+            display: none;
+        }
+
+        .radio-option .circle {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .radio-option input:checked + .circle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: var(--primary-red);
+            border-radius: 50%;
+        }
+
+        .radio-option input:checked ~ span {
+            color: var(--primary-red);
+            font-weight: bold;
+        }
+
+        .radio-option.active {
+            border-color: var(--primary-red);
+            background: rgba(230, 57, 70, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            background: linear-gradient(135deg, var(--primary-red), var(--primary-orange));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .calculate-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(230, 57, 70, 0.5);
+        }
+
+        .calculate-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Results Styling */
+        #results-container {
+            display: none;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stats-summary {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .gauge-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+        }
+
+        .gauge-svg {
+            transform: rotate(-90deg);
+        }
+
+        .gauge-bg {
+            fill: none;
+            stroke: #121d2b;
+            stroke-width: 15;
+        }
+
+        .gauge-progress {
+            fill: none;
+            stroke: var(--primary-red);
+            stroke-width: 15;
+            stroke-linecap: round;
+            stroke-dasharray: 565.48; /* 2 * PI * 90 */
+            stroke-dashoffset: 565.48;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gauge-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .gauge-percent {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1;
+        }
+
+        .gauge-label {
+            font-size: 1rem;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .sens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .sens-card {
+            background: #121d2b;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #2d3e50;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .sens-card:hover {
+            border-color: var(--primary-red);
+            transform: translateY(-5px);
+            background: #1e2a3a;
+        }
+
+        .sens-card i {
+            font-size: 1.5rem;
+            color: var(--primary-orange);
+            margin-bottom: 10px;
+        }
+
+        .sens-name {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .sens-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--neon-yellow);
+        }
+
+        .action-btns {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #2d3e50;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-orange);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            padding-bottom: 30px;
+            color: var(--text-gray);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .social-icons a {
+            color: var(--text-gray);
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary-red);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-red);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Ripple effect for button */
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+        }
+
+        @keyframes ripple-animation {
+            to { transform: scale(4); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="FF AIM LAB" class="main-logo">
+            <h1>FF AIM LAB</h1>
+        </div>
+        <p class="subtitle">Ultimate Sensitivity & Headshot Calculator</p>
+    </header>
+
+    <div class="main-grid">
+        <!-- Input Section -->
+        <section class="card">
+            <h2><i class="fas fa-mobile-alt"></i> Device & Playstyle</h2>
+            
+            <div class="form-group">
+                <label for="player-name">Player Name</label>
+                <input type="text" id="player-name" placeholder="Enter your in-game name">
+            </div>
+
+            <div class="form-group">
+                <label for="device-model">Phone Model</label>
+                <input type="text" id="device-model" placeholder="e.g., iPhone 13 Pro, ROG Phone 6">
+            </div>
+
+            <div class="main-grid" style="grid-template-columns: 1fr 1fr; margin-top: 0; gap: 15px;">
+                <div class="form-group">
+                    <label for="ram">RAM</label>
+                    <select id="ram">
+                        <option value="">Select RAM</option>
+                        <option value="2">2GB</option>
+                        <option value="3">3GB</option>
+                        <option value="4">4GB</option>
+                        <option value="6">6GB</option>
+                        <option value="8">8GB</option>
+                        <option value="12">12GB+</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="refresh-rate">Refresh Rate</label>
+                    <select id="refresh-rate">
+                        <option value="">Select Hz</option>
+                        <option value="60">60 Hz</option>
+                        <option value="90">90 Hz</option>
+                        <option value="120">120 Hz</option>
+                        <option value="144">144 Hz+</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="touch-sampling">Touch Sampling Rate</label>
+                <select id="touch-sampling">
+                    <option value="">Select Rate</option>
+                    <option value="120">120 Hz</option>
+                    <option value="180">180 Hz</option>
+                    <option value="240">240 Hz</option>
+                    <option value="360">360 Hz</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Combat Playstyle</label>
+                <div class="radio-group" id="playstyle-group">
+                    <div class="radio-option active" data-value="rush">
+                        <input type="radio" name="playstyle" value="rush" checked>
+                        <div class="circle"></div>
+                        <span>Rush / Close Combat</span>
+                    </div>
+                    <div class="radio-option" data-value="balanced">
+                        <input type="radio" name="playstyle" value="balanced">
+                        <div class="circle"></div>
+                        <span>Balanced / Tactical</span>
+                    </div>
+                    <div class="radio-option" data-value="long">
+                        <input type="radio" name="playstyle" value="long">
+                        <div class="circle"></div>
+                        <span>Sniper / Long Range</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calculate-trigger">
+                CALCULATE OPTIMAL SENS <i class="fas fa-bolt"></i>
+            </button>
+        </section>
+
+        <!-- Result Section -->
+        <section class="card" id="results-display">
+            <div id="results-placeholder" style="text-align: center; padding: 40px 0;">
+                <i class="fas fa-calculator" style="font-size: 4rem; color: #1e2a3a; margin-bottom: 20px;"></i>
+                <h3 style="color: var(--text-gray);">Enter your specs to see calculations</h3>
+            </div>
+
+            <div id="results-container">
+                <h2><i class="fas fa-poll"></i> Performance Analysis</h2>
+                
+                <div class="stats-summary">
+                    <div class="gauge-container">
+                        <svg class="gauge-svg" width="200" height="200">
+                            <circle class="gauge-bg" cx="100" cy="100" r="90"></circle>
+                            <circle class="gauge-progress" cx="100" cy="100" r="90" id="hs-progress"></circle>
+                        </svg>
+                        <div class="gauge-text">
+                            <div class="gauge-percent" id="hs-percent">0%</div>
+                            <div class="gauge-label">Headshot</div>
+                        </div>
+                    </div>
+                    <p style="color: var(--neon-yellow); font-size: 0.9rem; margin-top: -10px;">Predicted Accuracy Rate</p>
+                </div>
+
+                <div class="sens-grid">
+                    <div class="sens-card">
+                        <span class="sens-name">General</span>
+                        <div class="sens-value" id="val-general">--</div>
+                    </div>
+                    <div class="sens-card">
+                        <span class="sens-name">Red Dot</span>
+                        <div class="sens-value" id="val-reddot">--</div>
+                    </div>
+                    <div class="sens-card">
+                        <span class="sens-name">2x Scope</span>
+                        <div class="sens-value" id="val-2x">--</div>
+                    </div>
+                    <div class="sens-card">
+                        <span class="sens-name">4x Scope</span>
+                        <div class="sens-value" id="val-4x">--</div>
+                    </div>
+                    <div class="sens-card">
+                        <span class="sens-name">Sniper (AWM)</span>
+                        <div class="sens-value" id="val-sniper">--</div>
+                    </div>
+                    <div class="sens-card">
+                        <span class="sens-name">Free Look</span>
+                        <div class="sens-value" id="val-freelook">--</div>
+                    </div>
+                </div>
+
+                <div class="action-btns">
+                    <button class="copy-btn" id="copy-trigger">
+                        <i class="far fa-copy"></i> COPY TO GAME SETTINGS
+                    </button>
+                    <p style="font-size: 0.8rem; color: var(--text-gray); text-align: center;">
+                        *Estimated based on pro player data and hardware latency.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Aim Trainer Section -->
+    <div class="card" style="margin-top: 30px;">
+        <h2><i class="fas fa-crosshairs"></i> Aim Training Lab</h2>
+        <div id="aim-trainer-container" style="position: relative; width: 100%; height: 400px; background: #0f172a; border-radius: 10px; border: 2px dashed #2d3e50; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: crosshair;">
+            <div id="trainer-start-screen" style="text-align: center;">
+                <i class="fas fa-bullseye" style="font-size: 4rem; color: var(--primary-red); margin-bottom: 20px;"></i>
+                <h3>Practice Your Accuracy</h3>
+                <p style="color: var(--text-gray); margin-bottom: 20px;">Hit 20 targets as fast as you can!</p>
+                <button class="calculate-btn" id="start-trainer-btn" style="width: auto; padding: 12px 30px;">START DRILL</button>
+            </div>
+            <div id="trainer-stats" style="position: absolute; top: 10px; left: 10px; display: none; background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; font-weight: bold; border: 1px solid var(--primary-red);">
+                Time: <span id="trainer-timer">0.0s</span> | Hits: <span id="trainer-hits">0</span>/20
+            </div>
+            <canvas id="aim-canvas" style="display: none; width: 100%; height: 100%;"></canvas>
+            <div id="trainer-end-screen" style="display: none; text-align: center;">
+                <h3 style="color: var(--neon-yellow);">DRILL COMPLETE!</h3>
+                <p id="trainer-result-text" style="font-size: 1.5rem; margin: 15px 0;"></p>
+                <button class="calculate-btn" id="retry-trainer-btn" style="width: auto; padding: 10px 25px;">RETRY</button>
+            </div>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-gray); text-align: center; margin-top: 10px;">
+            Tip: Adjust your DPI and sensitivity based on your performance here.
+        </p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 FF AIM LAB | Designed for Free Fire Champions</p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+</div>
+
+<div class="toast" id="toast">Settings copied to clipboard!</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Elements
+        const calcBtn = document.getElementById('calculate-trigger');
+        const resultsContainer = document.getElementById('results-container');
+        const resultsPlaceholder = document.getElementById('results-placeholder');
+        const copyBtn = document.getElementById('copy-trigger');
+        const hsProgress = document.getElementById('hs-progress');
+        const hsPercentLabel = document.getElementById('hs-percent');
+        const toast = document.getElementById('toast');
+
+        // Radio button logic
+        const radioOptions = document.querySelectorAll('.radio-option');
+        radioOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                radioOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                option.querySelector('input').checked = true;
+            });
+        });
+
+        // Calculation Logic
+        calcBtn.addEventListener('click', (e) => {
+            // Ripple Effect
+            createRipple(e);
+
+            // Inputs
+            const ram = parseFloat(document.getElementById('ram').value);
+            const refresh = parseInt(document.getElementById('refresh-rate').value);
+            const touch = parseInt(document.getElementById('touch-sampling').value);
+            const playstyle = document.querySelector('input[name="playstyle"]:checked').value;
+            const model = document.getElementById('device-model').value;
+
+            // Validation
+            if (!ram || !refresh || !touch) {
+                showToast("Please fill in all device specifications!");
+                return;
+            }
+
+            // Calculation
+            let baseSens = 100;
+            
+            // 1. RAM Adjustment
+            let ramAdj = 0;
+            if (ram === 2) ramAdj = 99;
+            else if (ram === 3) ramAdj = 97.5;
+            else if (ram === 4) ramAdj = 97.5;
+            else if (ram === 6) ramAdj = 89.5;
+            else if (ram === 8) ramAdj = 90;
+            else if (ram === 12) ramAdj = 88.5;
+
+            // 2. Refresh Rate
+            let refreshAdj = 0;
+            if (refresh === 60) refreshAdj = -12;
+            else if (refresh === 90) refreshAdj = 0;
+            else if (refresh === 120) refreshAdj = 12;
+            else if (refresh === 144) refreshAdj = 18;
+
+            // 3. Touch Sampling
+            let touchAdj = 0;
+            if (touch === 120) touchAdj = 0;
+            else if (touch === 180) touchAdj = 5;
+            else if (touch === 240) touchAdj = 10;
+            else if (touch === 360) touchAdj = 15;
+
+            // Intermediate General Sensitivity
+            let generalSensRaw = baseSens + ramAdj + refreshAdj + touchAdj;
+
+            // 4. Playstyle Adjustment
+            let psAdj = { general: 0, redDot: 0, x2: 0, x4: 0, sniper: 0 };
+            if (playstyle === 'rush') {
+                psAdj = { general: 15, redDot: 10, x2: 5, x4: 0, sniper: -10 };
+            } else if (playstyle === 'long') {
+                psAdj = { general: -10, redDot: -5, x2: 0, x4: 10, sniper: 20 };
+            }
+
+            // Calculations for each scope
+            const results = {
+                general: clamp(generalSensRaw + psAdj.general, 1, 200),
+                redDot: clamp((generalSensRaw * 0.9) + psAdj.redDot, 1, 200),
+                x2: clamp((generalSensRaw * 0.8) + psAdj.x2, 1, 200),
+                x4: clamp((generalSensRaw * 0.65) + psAdj.x4, 1, 200),
+                sniper: clamp((generalSensRaw * 0.5) + psAdj.sniper, 1, 200),
+                freeLook: clamp(generalSensRaw * 0.7, 1, 200)
+            };
+
+            // 5. Headshot Percentage Calculation
+            const ramFactors = { 2: 40, 3: 50, 4: 65, 6: 80, 8: 90, 12: 95 };
+            const refreshFactors = { 60: 50, 90: 70, 120: 85, 144: 95 };
+            const touchFactors = { 120: 60, 180: 75, 240: 90, 360: 98 };
+            const playstyleFactors = { rush: 85, balanced: 75, long: 80 };
+
+            const ramScore = ramFactors[ram] || 65;
+            const refreshScore = refreshFactors[refresh] || 70;
+            const touchScore = touchFactors[touch] || 75;
+            const playstyleScore = playstyleFactors[playstyle] || 75;
+
+            // Weighted average (giving a bit more weight to Touch and Refresh)
+            const hsPercentTotal = Math.round((ramScore * 0.2) + (refreshScore * 0.3) + (touchScore * 0.35) + (playstyleScore * 0.15));
+
+            // Update UI
+            updateUI(results, hsPercentTotal);
+        });
+
+        function updateUI(sensBody, hsPercent) {
+            resultsPlaceholder.style.display = 'none';
+            resultsContainer.style.display = 'block';
+
+            // Sens values
+            document.getElementById('val-general').textContent = Math.round(sensBody.general);
+            document.getElementById('val-reddot').textContent = Math.round(sensBody.redDot);
+            document.getElementById('val-2x').textContent = Math.round(sensBody.x2);
+            document.getElementById('val-4x').textContent = Math.round(sensBody.x4);
+            document.getElementById('val-sniper').textContent = Math.round(sensBody.sniper);
+            document.getElementById('val-freelook').textContent = Math.round(sensBody.freeLook);
+
+            // Gauge animation
+            animateGauge(hsPercent);
+        }
+
+        function animateGauge(percent) {
+            const radius = 90;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (percent / 100) * circumference;
+            
+            hsProgress.style.strokeDasharray = `${circumference} ${circumference}`;
+            
+            // Number counter
+            let current = 0;
+            const timer = setInterval(() => {
+                if (current >= percent) {
+                    clearInterval(timer);
+                    hsPercentLabel.textContent = `${percent}%`;
+                } else {
+                    current++;
+                    hsPercentLabel.textContent = `${current}%`;
+                }
+            }, 15);
+
+            setTimeout(() => {
+                hsProgress.style.strokeDashoffset = offset;
+            }, 100);
+        }
+
+        function clamp(val, min, max) {
+            return Math.min(Math.max(val, min), max);
+        }
+
+        // Copy Functionality
+        copyBtn.addEventListener('click', () => {
+            const playerName = document.getElementById('player-name').value || "Pro Player";
+            const text = `FF AIM LAB SETTINGS for ${playerName}:\n` +
+                `General: ${document.getElementById('val-general').textContent}\n` +
+                `Red Dot: ${document.getElementById('val-reddot').textContent}\n` +
+                `2x Scope: ${document.getElementById('val-2x').textContent}\n` +
+                `4x Scope: ${document.getElementById('val-4x').textContent}\n` +
+                `Sniper: ${document.getElementById('val-sniper').textContent}\n` +
+                `Free Look: ${document.getElementById('val-freelook').textContent}\n` +
+                `Headshot Efficiency: ${document.getElementById('hs-percent').textContent}`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("Settings copied to clipboard!");
+            });
+        });
+
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Aim Trainer Logic
+        const trainerContainer = document.getElementById('aim-trainer-container');
+        const startBtn = document.getElementById('start-trainer-btn');
+        const retryBtn = document.getElementById('retry-trainer-btn');
+        const startScreen = document.getElementById('trainer-start-screen');
+        const endScreen = document.getElementById('trainer-end-screen');
+        const trainerStats = document.getElementById('trainer-stats');
+        const timerLabel = document.getElementById('trainer-timer');
+        const hitsLabel = document.getElementById('trainer-hits');
+        const canvas = document.getElementById('aim-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let hits = 0;
+        let startTime = 0;
+        let timerInterval;
+        let target = { x: 0, y: 0, r: 20 };
+        const totalTargets = 20;
+
+        function resizeCanvas() {
+            canvas.width = trainerContainer.offsetWidth;
+            canvas.height = trainerContainer.offsetHeight;
+        }
+
+        function createTarget() {
+            const margin = 30;
+            target.x = margin + Math.random() * (canvas.width - margin * 2);
+            target.y = margin + Math.random() * (canvas.height - margin * 2);
+            target.r = 15 + Math.random() * 10;
+            draw();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw target
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(230, 57, 70, 0.2)';
+            ctx.fill();
+            ctx.strokeStyle = '#e63946';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.r * 0.6, 0, Math.PI * 2);
+            ctx.strokeStyle = '#e63946';
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.r * 0.2, 0, Math.PI * 2);
+            ctx.fillStyle = '#e63946';
+            ctx.fill();
+        }
+
+        function startDrill() {
+            hits = 0;
+            hitsLabel.textContent = hits;
+            startScreen.style.display = 'none';
+            endScreen.style.display = 'none';
+            trainerStats.style.display = 'block';
+            canvas.style.display = 'block';
+            resizeCanvas();
+            createTarget();
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimer, 10);
+        }
+
+        function updateTimer() {
+            const elapsed = (Date.now() - startTime) / 1000;
+            timerLabel.textContent = elapsed.toFixed(2) + 's';
+        }
+
+        function endDrill() {
+            clearInterval(timerInterval);
+            const finalTime = timerLabel.textContent;
+            canvas.style.display = 'none';
+            trainerStats.style.display = 'none';
+            endScreen.style.display = 'block';
+            document.getElementById('trainer-result-text').textContent = `Time: ${finalTime}`;
+        }
+
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const dist = Math.sqrt((mouseX - target.x)**2 + (mouseY - target.y)**2);
+            if (dist <= target.r) {
+                hits++;
+                hitsLabel.textContent = hits;
+                if (hits >= totalTargets) {
+                    endDrill();
+                } else {
+                    createTarget();
+                }
+            }
+        });
+
+        startBtn.addEventListener('click', startDrill);
+        retryBtn.addEventListener('click', startDrill);
+        window.addEventListener('resize', resizeCanvas);
+
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const circle = document.createElement('span');
+            const diameter = Math.max(button.clientWidth, button.clientHeight);
+            const radius = diameter / 2;
+
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${event.clientX - button.offsetLeft - radius}px`;
+            circle.style.top = `${event.clientY - button.offsetTop - radius}px`;
+            circle.classList.add('ripple');
+
+            const ripple = button.getElementsByClassName('ripple')[0];
+            if (ripple) { ripple.remove(); }
+            button.appendChild(circle);
+        }
+    });
+</script>
+
+</body>
+</html>
